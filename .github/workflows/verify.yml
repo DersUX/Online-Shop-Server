@@ -1,0 +1,16 @@
+name: Verify
+
+on: [push, pull_request]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - run: dotnet build Verification/Verification.csproj --configuration Release
+      - run: dotnet format OnlineShopServer.csproj --verify-no-changes --no-restore
+      - run: dotnet format Verification/Verification.csproj --verify-no-changes --no-restore
+      - run: dotnet run --project Verification/Verification.csproj --configuration Release --no-build
